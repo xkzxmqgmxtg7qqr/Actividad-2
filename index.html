@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Actividad Formativa 2 - Matrices y Vectores</title>
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']],
+        displayMath: [['\\[','\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <style>
+    :root{
+      --utem-azul:#004B8D;
+      --utem-cian:#00A5CF;
+      --gris-900:#1f2937;
+      --gris-700:#374151;
+      --gris-500:#6b7280;
+      --gris-300:#d1d5db;
+      --gris-200:#e5e7eb;
+      --gris-100:#f8fafc;
+      --blanco:#ffffff;
+      --verde:#065f46;
+      --verde-bg:#ecfdf5;
+      --amarillo:#92400e;
+      --amarillo-bg:#fffbeb;
+      --azul-bg:#eff6ff;
+    }
+
+    *{box-sizing:border-box;}
+
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,#eef5fb 0%, #f8fafc 100%);
+      color:var(--gris-900);
+      line-height:1.65;
+    }
+
+    .contenedor{
+      max-width:1200px;
+      margin:0 auto;
+      padding:24px;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,var(--utem-azul) 0%, var(--utem-cian) 100%);
+      color:white;
+      border-radius:20px;
+      padding:34px 30px;
+      margin-bottom:24px;
+      box-shadow:0 10px 24px rgba(15,23,42,.08);
+    }
+
+    .hero p{
+      margin:0 0 8px 0;
+    }
+
+    .hero h1{
+      margin:0;
+      font-size:34px;
+      line-height:1.2;
+    }
+
+    .hero .bajada{
+      margin-top:14px;
+      font-size:18px;
+      max-width:920px;
+    }
+
+    .meta{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .meta-card{
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:14px;
+      padding:12px 14px;
+    }
+
+    .barra{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:18px;
+    }
+
+    button{
+      border:none;
+      border-radius:12px;
+      padding:11px 16px;
+      font-weight:700;
+      cursor:pointer;
+      background:var(--utem-azul);
+      color:white;
+    }
+
+    button.sec{ background:#0f766e; }
+    button.neu{ background:#4b5563; }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    @media (max-width:960px){
+      .grid{ grid-template-columns:1fr; }
+    }
+
+    .panel{
+      background:var(--blanco);
+      border:1px solid var(--gris-200);
+      border-radius:18px;
+      padding:22px;
+      box-shadow:0 8px 18px rgba(15,23,42,.06);
+      margin-bottom:18px;
+    }
+
+    .panel h2,.panel h3{
+      margin-top:0;
+      color:var(--utem-azul);
+    }
+
+    .badge{
+      display:inline-block;
+      background:#dbeafe;
+      color:#1e3a8a;
+      border-radius:999px;
+      padding:5px 10px;
+      font-size:.9rem;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+
+    .actividad{
+      background:#fff;
+      border:1px solid var(--gris-200);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 8px 18px rgba(15,23,42,.06);
+      margin-bottom:18px;
+    }
+
+    .actividad-header{
+      background:linear-gradient(135deg,#f8fbff 0%, #eef7fc 100%);
+      border-bottom:1px solid var(--gris-200);
+      padding:18px 20px 14px 20px;
+    }
+
+    .actividad-header h3{
+      margin:0;
+      color:var(--utem-azul);
+      font-size:1.2rem;
+    }
+
+    .actividad-body{
+      padding:18px 20px 20px 20px;
+    }
+
+    .subitem{
+      background:var(--gris-100);
+      border:1px solid var(--gris-200);
+      border-radius:14px;
+      padding:14px;
+      margin:12px 0;
+    }
+
+    .subitem label{
+      display:block;
+      font-weight:700;
+      margin-bottom:8px;
+      color:var(--gris-700);
+    }
+
+    textarea, input[type="text"], select{
+      width:100%;
+      border:1px solid var(--gris-300);
+      border-radius:12px;
+      padding:12px;
+      font:inherit;
+      background:white;
+    }
+
+    textarea{
+      resize:vertical;
+      min-height:100px;
+    }
+
+    .mini{ min-height:80px; }
+    .media{ min-height:130px; }
+    .grande{ min-height:190px; }
+
+    .acciones{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .ayuda,.solucion{
+      display:none;
+      margin-top:10px;
+      border-radius:12px;
+      padding:12px;
+    }
+
+    .ayuda{
+      background:var(--amarillo-bg);
+      color:var(--amarillo);
+      border:1px solid #fcd34d;
+    }
+
+    .solucion{
+      background:var(--azul-bg);
+      color:#1e3a8a;
+      border:1px solid #93c5fd;
+    }
+
+    .sticky{
+      position:sticky;
+      top:14px;
+    }
+
+    .rubrica-item{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:center;
+      padding:10px 0;
+      border-bottom:1px dashed var(--gris-200);
+    }
+
+    .rubrica-item:last-child{ border-bottom:none; }
+
+    .resultado{
+      font-weight:700;
+      color:var(--utem-azul);
+      margin-top:12px;
+    }
+
+    .progreso-barra{
+      width:100%;
+      height:12px;
+      background:#e5e7eb;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .progreso-valor{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--utem-azul),var(--utem-cian));
+      transition:width .2s ease;
+    }
+
+    .progreso-texto{
+      margin-top:8px;
+      color:var(--gris-500);
+      font-size:.92rem;
+    }
+
+    .pill{
+      display:inline-block;
+      background:#eef2ff;
+      color:#4338ca;
+      border-radius:999px;
+      padding:4px 10px;
+      margin:4px 6px 0 0;
+      font-size:.88rem;
+      font-weight:700;
+    }
+
+    .checklist label{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      margin:10px 0;
+      font-weight:400;
+    }
+
+    @media print{
+      .barra,.acciones button{display:none !important;}
+      .ayuda,.solucion{display:block !important;}
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <section class="hero">
+      <p><strong>Álgebra Matricial · Módulo 2 · Actividad Formativa 2</strong></p>
+      <h1>Actividad interactiva: matrices, vectores y sistemas lineales</h1>
+      <p class="bajada">En esta actividad trabajarás modelación con matrices, resolución de sistemas mediante Gauss y operatoria matricial. El propósito no es solo obtener respuestas, sino comprender cómo las matrices organizan información y permiten resolver problemas matemáticos de manera estructurada.</p>
+
+      <div class="meta">
+        <div class="meta-card"><strong>Asignatura</strong><br>Álgebra Matricial</div>
+        <div class="meta-card"><strong>Módulo</strong><br>Matrices y vectores</div>
+        <div class="meta-card"><strong>Formato</strong><br>HTML + LaTeX + JavaScript</div>
+        <div class="meta-card"><strong>Actividad</strong><br>Formativa 2</div>
+      </div>
+    </section>
+
+    <div class="barra">
+      <button onclick="guardarTodo()">Guardar progreso</button>
+      <button class="sec" onclick="cargarTodo()">Cargar progreso</button>
+      <button class="neu" onclick="window.print()">Imprimir / Guardar PDF</button>
+      <button class="neu" onclick="limpiarTodo()">Limpiar respuestas</button>
+    </div>
+
+    <div class="grid">
+      <main>
+        <section class="panel">
+          <span class="badge">Logro de aprendizaje</span>
+          <p>Aplica matrices y vectores de acuerdo con la teoría para resolver problemas en el ámbito de la matemática.</p>
+        </section>
+
+        <section class="panel">
+          <span class="badge">Objetivos</span>
+          <ul>
+            <li>Comprender conceptos básicos de álgebra lineal vinculados a matrices.</li>
+            <li>Manipular matrices para realizar operaciones y cálculos matemáticos.</li>
+            <li>Aplicar matrices a la resolución de sistemas de ecuaciones lineales.</li>
+            <li>Analizar problemas matemáticos que involucran matrices.</li>
+            <li>Comprender la estructura y organización de las matrices.</li>
+          </ul>
+        </section>
+
+        <section class="actividad">
+          <div class="actividad-header">
+            <h3>1. Problema contextualizado: películas en una sala de cine</h3>
+          </div>
+          <div class="actividad-body">
+            <p>Una sala de cine está especializada en películas <strong>infantiles</strong>, de <strong>Oeste Americano</strong> y de <strong>terror</strong>. Se sabe que:</p>
+            <ul>
+              <li>El 60 % de las películas infantiles más el 50 % de las del Oeste Americano representan el 30 % del total de películas.</li>
+              <li>El 20 % de las infantiles más el 60 % de las del Oeste, más el 60 % de las de terror representan la mitad del total de películas.</li>
+              <li>Hay 100 películas más del Oeste Americano que infantiles.</li>
+            </ul>
+            <p>Utilizando matrices y el algoritmo de Gauss, encuentre cuántas películas de cada tipo tiene el cine.</p>
+
+            <div class="subitem">
+              <label for="p1a">(a) Identifique la pregunta orientadora del problema.</label>
+              <textarea id="p1a" class="mini" data-save></textarea>
+              <div class="acciones">
+                <button type="button" onclick="toggle('ay1a')">Ver pista</button>
+                <button type="button" class="sec" onclick="toggle('so1a')">Ver ejemplo</button>
+              </div>
+              <div id="ay1a" class="ayuda">La pregunta debe apuntar a determinar cuántas películas hay de cada tipo en el cine.</div>
+              <div id="so1a" class="solucion">Ejemplo: ¿Cuántas películas infantiles, del Oeste Americano y de terror tiene la sala de cine?</div>
+            </div>
+
+            <div class="subitem">
+              <label for="p1b">(b) Defina las variables del problema.</label>
+              <textarea id="p1b" class="mini" data-save></textarea>
+              <div class="acciones">
+                <button type="button" onclick="toggle('ay1b')">Ver pista</button>
+                <button type="button" class="sec" onclick="toggle('so1b')">Ver ejemplo</button>
+              </div>
+              <div id="ay1b" class="ayuda">Asigna una variable a cada tipo de película.</div>
+              <div id="so1b" class="solucion">\(x\): número de películas infantiles, \(y\): número de películas del Oeste Americano, \(z\): número de películas de terror.</div>
+            </div>
+
+            <div class="subitem">
+              <label for="p1c">(c) Obtenga las ecuaciones que relacionan el problema.</label>
+              <textarea id="p1c" class="grande" data-save></textarea>
+              <div class="acciones">
+                <button type="button" onclick="toggle('ay1c')">Ver pista</button>
+                <button type="button" class="sec" onclick="toggle('so1c')">Ver posible modelación</button>
+              </div>
+              <div id="ay1c" class="ayuda">Introduce el total \(T=x+y+z\). Luego traduce cada afirmación porcentual y la diferencia entre cantidades.</div>
+              <div id="so1c" class="solucion">
+                Una modelación posible es:
+                \[
+                0.6x+0.5y=0.3(x+y+z)
+                \]
+                \[
+                0.2x+0.6y+0.6z=0.5(x+y+z)
+                \]
+                \[
+                y=x+100
+                \]
+              </div>
+            </div>
+
+            <div class="subitem">
+              <label for="p1d">(d) Escriba el sistema en forma matricial, sin resolver.</label>
+              <textarea id="p1d" class="media" data-save></textarea>
+            </div>
+
+            <div class="subitem">
+              <label for="p1e">(e) Usando el algoritmo de Gauss, encuentre la solución del problema.</label>
+              <textarea id="p1e" class="grande" data-save></textarea>
+            </div>
+
+            <div class="subitem">
+              <label for="p1f">(f) Interprete los resultados obtenidos en el contexto del problema.</label>
+              <textarea id="p1f" class="mini" data-save></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="actividad">
+          <div class="actividad-header">
+            <h3>2. Sistema con parámetros \(a\) y \(b\)</h3>
+          </div>
+          <div class="actividad-body">
+            <p>Determine los valores de \(a\) y \(b\) para que el sistema <strong>no tenga solución</strong>:</p>
+            <p>
+              \[
+              \begin{aligned}
+              x+2y+3z+4t&=14\\
+              -x+4y+5z+10t&=22\\
+              7x+8y+13z+14t&=62\\
+              3x+3y+5z+at&=b
+              \end{aligned}
+              \]
+            </p>
+
+            <div class="subitem">
+              <label for="p2a">Desarrolle el procedimiento con Gauss y determine la condición sobre \(a\) y \(b\).</label>
+              <textarea id="p2a" class="grande" data-save></textarea>
+              <div class="acciones">
+                <button type="button" onclick="toggle('ay2a')">Ver pista</button>
+                <button type="button" class="sec" onclick="toggle('so2a')">Ver orientación</button>
+              </div>
+              <div id="ay2a" class="ayuda">Reduce primero las tres ecuaciones iniciales y analiza cuándo la cuarta produce una fila del tipo \(0=\text{constante no nula}\).</div>
+              <div id="so2a" class="solucion">La clave es que la última fila quede dependiente en los coeficientes pero inconsistente en el término independiente.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="actividad">
+          <div class="actividad-header">
+            <h3>3. Operatoria de matrices: hallar \(X\) e \(Y\)</h3>
+          </div>
+          <div class="actividad-body">
+            <p>Sean \(X_{2\times 2}\) y \(Y_{2\times 2}\) matrices tales que:</p>
+            <p>
+              \[
+              X+3Y=
+              \begin{pmatrix}
+              -2 & 9\\
+              -4 & 12
+              \end{pmatrix},
+              \qquad
+              2X-Y=
+              \begin{pmatrix}
+              5 & 4\\
+              7 & 12
+              \end{pmatrix}
+              \]
+            </p>
+
+            <div class="subitem">
+              <label for="p3a">Desarrolle la resolución matricial.</label>
+              <textarea id="p3a" class="grande" data-save></textarea>
+              <div class="acciones">
+                <button type="button" onclick="toggle('ay3a')">Ver pista</button>
+              </div>
+              <div id="ay3a" class="ayuda">Puedes resolver este sistema tratando a \(X\) y \(Y\) como incógnitas matriciales y combinando linealmente ambas ecuaciones.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="actividad">
+          <div class="actividad-header">
+            <h3>4. Segunda operatoria de matrices</h3>
+          </div>
+          <div class="actividad-body">
+            <p>Sean \(X\) e \(Y\) matrices tales que:</p>
+            <p>
+              \[
+              X+3X=Y
+              \]
+              \[
+              X+Y=
+              \begin{pmatrix}
+              0 & -10\\
+              5 & 0\\
+              15 & 0
+              \end{pmatrix}
+              \]
+            </p>
+
+            <div class="subitem">
+              <label for="p4a">Desarrolle la resolución y explique la lógica del procedimiento.</label>
+              <textarea id="p4a" class="grande" data-save></textarea>
+              <div class="acciones">
+                <button type="button" onclick="toggle('ay4a')">Ver pista</button>
+              </div>
+              <div id="ay4a" class="ayuda">Primero simplifica \(X+3X=Y\), luego reemplaza en la segunda ecuación.</div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <aside>
+        <div class="panel sticky">
+          <h3>Panel de seguimiento</h3>
+
+          <div class="progreso-barra">
+            <div id="progresoValor" class="progreso-valor"></div>
+          </div>
+          <div id="progresoTexto" class="progreso-texto">Progreso completado: 0%</div>
+
+          <hr style="margin:18px 0; border:none; border-top:1px solid #e5e7eb;">
+
+          <div class="rubrica-item">
+            <span>Modelación algebraica</span>
+            <select data-rubrica>
+              <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            </select>
+          </div>
+          <div class="rubrica-item">
+            <span>Forma matricial</span>
+            <select data-rubrica>
+              <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            </select>
+          </div>
+          <div class="rubrica-item">
+            <span>Aplicación de Gauss</span>
+            <select data-rubrica>
+              <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            </select>
+          </div>
+          <div class="rubrica-item">
+            <span>Operatoria de matrices</span>
+            <select data-rubrica>
+              <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            </select>
+          </div>
+          <div class="rubrica-item">
+            <span>Interpretación</span>
+            <select data-rubrica>
+              <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            </select>
+          </div>
+
+          <button style="margin-top:12px; width:100%;" onclick="calcularRubrica()">Calcular puntaje</button>
+          <div id="resultadoRubrica" class="resultado">Puntaje: --</div>
+
+          <hr style="margin:18px 0; border:none; border-top:1px solid #e5e7eb;">
+
+          <h3>Checklist</h3>
+          <div class="checklist">
+            <label><input type="checkbox" data-save-check="c1"> Identifiqué correctamente variables e incógnitas.</label>
+            <label><input type="checkbox" data-save-check="c2"> Escribí la forma matricial cuando correspondía.</label>
+            <label><input type="checkbox" data-save-check="c3"> Registré ordenadamente el procedimiento con Gauss.</label>
+            <label><input type="checkbox" data-save-check="c4"> Revisé la consistencia de mis resultados.</label>
+            <label><input type="checkbox" data-save-check="c5"> Interpreté las respuestas dentro del contexto.</label>
+          </div>
+
+          <hr style="margin:18px 0; border:none; border-top:1px solid #e5e7eb;">
+
+          <h3>Apoyo rápido</h3>
+          <span class="pill">Matrices</span>
+          <span class="pill">Vectores</span>
+          <span class="pill">Gauss</span>
+          <span class="pill">Parámetros</span>
+          <span class="pill">Operatoria</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'utem_actividad_2_matrices_vectores';
+
+    function toggle(id){
+      const el = document.getElementById(id);
+      el.style.display = el.style.display === 'block' ? 'none' : 'block';
+      if(window.MathJax) MathJax.typesetPromise([el]);
+    }
+
+    function recogerDatos(){
+      const data = {};
+      document.querySelectorAll('[data-save]').forEach(el => data[el.id] = el.value);
+      document.querySelectorAll('[data-rubrica]').forEach((el, i) => data['rubrica_' + i] = el.value);
+      document.querySelectorAll('[data-save-check]').forEach(el => data[el.getAttribute('data-save-check')] = el.checked);
+      return data;
+    }
+
+    function aplicarDatos(data){
+      document.querySelectorAll('[data-save]').forEach(el => {
+        if(data[el.id] !== undefined) el.value = data[el.id];
+      });
+      document.querySelectorAll('[data-rubrica]').forEach((el, i) => {
+        if(data['rubrica_' + i] !== undefined) el.value = data['rubrica_' + i];
+      });
+      document.querySelectorAll('[data-save-check]').forEach(el => {
+        const k = el.getAttribute('data-save-check');
+        if(data[k] !== undefined) el.checked = data[k];
+      });
+      actualizarProgreso();
+    }
+
+    function guardarTodo(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(recogerDatos()));
+      alert('Progreso guardado en este navegador.');
+    }
+
+    function cargarTodo(){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw){
+        alert('No hay progreso guardado.');
+        return;
+      }
+      aplicarDatos(JSON.parse(raw));
+      alert('Progreso cargado correctamente.');
+    }
+
+    function limpiarTodo(){
+      if(!confirm('¿Deseas borrar todas las respuestas de esta actividad?')) return;
+      document.querySelectorAll('textarea,input[type="text"]').forEach(el => el.value = '');
+      document.querySelectorAll('[data-rubrica]').forEach(el => el.value = '0');
+      document.querySelectorAll('[data-save-check]').forEach(el => el.checked = false);
+      localStorage.removeItem(STORAGE_KEY);
+      document.getElementById('resultadoRubrica').textContent = 'Puntaje: --';
+      actualizarProgreso();
+    }
+
+    function calcularRubrica(){
+      let total = 0;
+      document.querySelectorAll('[data-rubrica]').forEach(el => total += Number(el.value));
+      const max = document.querySelectorAll('[data-rubrica]').length * 3;
+      document.getElementById('resultadoRubrica').textContent = `Puntaje: ${total} / ${max}`;
+    }
+
+    function actualizarProgreso(){
+      const campos = [...document.querySelectorAll('[data-save]')];
+      const checks = [...document.querySelectorAll('[data-save-check]')];
+      const total = campos.length + checks.length;
+      let completos = 0;
+
+      campos.forEach(el => { if(el.value.trim() !== '') completos += 1; });
+      checks.forEach(el => { if(el.checked) completos += 1; });
+
+      const porcentaje = total === 0 ? 0 : Math.round((completos / total) * 100);
+      document.getElementById('progresoValor').style.width = porcentaje + '%';
+      document.getElementById('progresoTexto').textContent = `Progreso completado: ${porcentaje}%`;
+    }
+
+    document.addEventListener('input', e => {
+      if(e.target.matches('[data-save], [data-save-check], [data-rubrica]')){
+        actualizarProgreso();
+      }
+    });
+
+    window.addEventListener('load', () => {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(raw) aplicarDatos(JSON.parse(raw));
+      actualizarProgreso();
+      if(window.MathJax) MathJax.typesetPromise();
+    });
+  </script>
+</body>
+</html>
